@@ -127,6 +127,24 @@ function formatUptime(uptimeMs) {
     }
 }
 
+// Zeige Cookie-Banner nach Loading-Screen wenn kein Consent
+function showCookieBannerIfNeeded() {
+    const cookieBanner = document.getElementById('cookieBanner');
+    const cookieConsent = localStorage.getItem('cookieConsent');
+    
+    if (!cookieConsent && cookieBanner) {
+        // Blur den Hintergrund
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.style.filter = 'blur(10px)';
+            mainContent.style.pointerEvents = 'none';
+        }
+        
+        // Zeige Banner
+        cookieBanner.style.display = 'block';
+    }
+}
+
 // Loading Screen
 window.addEventListener('load', () => {
     setTimeout(() => {
@@ -136,6 +154,8 @@ window.addEventListener('load', () => {
             document.body.classList.remove('loading');
             setTimeout(() => {
                 loadingScreen.style.display = 'none';
+                // Zeige Cookie-Banner nach Loading-Screen
+                showCookieBannerIfNeeded();
             }, 500);
         }
     }, 1500);
@@ -336,6 +356,131 @@ async function loadDiscordAvatars() {
 // Reduced motion support
 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.body.classList.add('reduced-motion');
+}
+
+// FAQ Accordion Functionality
+document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', () => {
+        const faqItem = button.parentElement;
+        const isActive = faqItem.classList.contains('active');
+        
+        // Schließe alle anderen FAQ-Items
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Toggle aktuelles Item
+        if (!isActive) {
+            faqItem.classList.add('active');
+        }
+    });
+});
+
+// Mobile Menu Toggle
+const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+const hamburgerMenuPanel = document.querySelector('.hamburger-menu-panel');
+
+if (mobileMenuToggle && hamburgerMenuPanel) {
+    mobileMenuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mobileMenuToggle.classList.toggle('active');
+        hamburgerMenuPanel.classList.toggle('active');
+    });
+    
+    // Schließe Menü beim Klick auf einen Link
+    document.querySelectorAll('.hamburger-menu-panel a').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenuToggle.classList.remove('active');
+            hamburgerMenuPanel.classList.remove('active');
+        });
+    });
+    
+    // Schließe Menü beim Klick außerhalb
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.mobile-menu-toggle') && !e.target.closest('.hamburger-menu-panel')) {
+            mobileMenuToggle.classList.remove('active');
+            hamburgerMenuPanel.classList.remove('active');
+        }
+    });
+}
+
+// Cookie Consent Banner
+const cookieBanner = document.getElementById('cookieBanner');
+const acceptCookies = document.getElementById('acceptCookies');
+const declineCookies = document.getElementById('declineCookies');
+
+if (acceptCookies) {
+    acceptCookies.addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', 'accepted');
+        cookieBanner.style.display = 'none';
+        
+        // Entferne Blur
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.style.filter = 'none';
+            mainContent.style.pointerEvents = 'auto';
+        }
+        
+        // Initialisiere Google Analytics wenn verfügbar
+        if (typeof gtag !== 'undefined') {
+            gtag('js', new Date());
+            gtag('config', 'G-S5PX3RQMXE');
+        }
+    });
+}
+
+if (declineCookies) {
+    declineCookies.addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', 'declined');
+        cookieBanner.style.display = 'none';
+        
+        // Entferne Blur
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.style.filter = 'none';
+            mainContent.style.pointerEvents = 'auto';
+        }
+    });
+}
+
+// Cookie Settings Button
+const cookieSettingsBtn = document.getElementById('cookieSettingsBtn');
+if (cookieSettingsBtn) {
+    cookieSettingsBtn.addEventListener('click', () => {
+        // Zeige Cookie-Banner wieder an
+        if (cookieBanner) {
+            cookieBanner.style.display = 'block';
+            
+            // Zeige aktuellen Status an
+            updateCookieStatus();
+            
+            // Blur den Hintergrund
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                mainContent.style.filter = 'blur(10px)';
+                mainContent.style.pointerEvents = 'none';
+            }
+        }
+    });
+}
+
+// Aktualisiere Cookie-Status-Anzeige
+function updateCookieStatus() {
+    const cookieStatus = document.getElementById('cookieStatus');
+    const currentConsent = localStorage.getItem('cookieConsent');
+    
+    if (cookieStatus) {
+        if (currentConsent === 'accepted') {
+            cookieStatus.textContent = '✓ Status: Cookies akzeptiert';
+            cookieStatus.className = 'cookie-status accepted show';
+        } else if (currentConsent === 'declined') {
+            cookieStatus.textContent = '✗ Status: Cookies abgelehnt';
+            cookieStatus.className = 'cookie-status declined show';
+        } else {
+            cookieStatus.textContent = '';
+            cookieStatus.className = 'cookie-status';
+        }
+    }
 }
 
 // Initialize
