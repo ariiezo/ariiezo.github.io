@@ -322,6 +322,26 @@ nav {
     gap: 0.1rem;
 }
 
+.back-home-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.back-home-link:hover {
+    color: #8b5cf6;
+    transform: scale(1.1);
+}
+
+.back-home-link svg {
+    width: 24px;
+    height: 24px;
+}
+
+
 .discord-link::before {
     content: '';
     position: absolute;
@@ -540,6 +560,46 @@ main {
 .stats-section {
     margin-bottom: 6rem;
     margin-top: 3rem;
+    position: relative;
+}
+
+.stats-offline-notice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    margin: 0 auto 2rem;
+    max-width: 500px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.offline-dot {
+    width: 12px;
+    height: 12px;
+    background: #ef4444;
+    border-radius: 50%;
+    animation: pulse-red 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 0.7;
+    }
+}
+
+.offline-text {
+    color: #ef4444;
+    font-size: 1.1rem;
+    font-weight: 500;
 }
 
 .stats-grid {
@@ -947,6 +1007,120 @@ section {
 
 .pricing-btn:hover::before {
     opacity: 1;
+}
+
+/* Team Section */
+.team-section {
+    margin: 8rem 0;
+    text-align: center;
+}
+
+.team-section h2 {
+    margin-top: 1rem;
+    margin-bottom: 4rem;
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #fff 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.team-card {
+    background: rgba(20, 20, 28, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.team-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(139, 92, 246, 0.6);
+    box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3);
+}
+
+.team-card:hover::before {
+    opacity: 1;
+}
+
+.team-avatar {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1.5rem;
+}
+
+.discord-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid rgba(139, 92, 246, 0.5);
+    object-fit: cover;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.team-card:hover .discord-avatar {
+    border-color: #8b5cf6;
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+}
+
+.avatar-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
+    animation: pulse 2s ease-in-out infinite;
+    z-index: 1;
+}
+
+.discord-avatar[src]:not([src=""]) + .avatar-loader {
+    display: none;
+}
+
+.team-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.team-role {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    position: relative;
+    z-index: 2;
 }
 
 /* CTA Section */
@@ -1417,6 +1591,8 @@ footer {
     justify-content: center;
     gap: 2rem;
     margin-bottom: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 .social-link {
