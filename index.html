@@ -19,18 +19,23 @@
 <meta property="og:url" content="https://metatags.io/" />
 <meta property="og:title" content="AlphaCloud" />
 <meta property="og:description" content="Legal Information about AlphaCloud" />
-<meta property="og:image" content="https://metatags.io/images/meta-tags.png" />
+<meta property="og:image" content="https://cdn.discordapp.com/attachments/1369406936050827304/1396584511516573776/image.png?ex=695cc2ee&is=695b716e&hm=b7606dbe7b33ed7f9b1ee5fecddaad5946009ef8d12cd976b50f2bcab86ebdec&" />
 
 <!-- X (Twitter) -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content="https://metatags.io/" />
 <meta property="twitter:title" content="AlphaCloud" />
 <meta property="twitter:description" content="Legal Information about AlphaCloud" />
-<meta property="twitter:image" content="https://metatags.io/images/meta-tags.png" />
-
-<!-- Meta Tags Generated with https://metatags.io -->
+<meta property="twitter:image" content="https://cdn.discordapp.com/attachments/1369406936050827304/1396584511516573776/image.png?ex=695cc2ee&is=695b716e&hm=b7606dbe7b33ed7f9b1ee5fecddaad5946009ef8d12cd976b50f2bcab86ebdec&" />
 </head>
-<body>
+<body class="loading">
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p class="loading-text">Loading<span class="dots"><span>.</span><span>.</span><span>.</span></span></p>
+    </div>
+
+    <div id="main-content">
     <canvas id="bg-canvas"></canvas>
     <div class="bg-gradient"></div>
 
@@ -80,7 +85,7 @@
         <section id="tos">
             <div class="content">
                 <div class="section-header">
-                    <h2 data-de="Nutzungsbedingungen" data-en="Terms of Service">Nutzungsbedingungen</h2>
+                    <h2 class="animate-on-load" data-de="Nutzungsbedingungen" data-en="Terms of Service">Nutzungsbedingungen</h2>
                     <p class="last-updated" data-de="Stand: 5. Januar 2026" data-en="Last updated: January 5, 2026">Stand: 5. Januar 2026</p>
                 </div>
 
@@ -161,7 +166,7 @@
         <section id="privacy">
             <div class="content">
                 <div class="section-header">
-                    <h2 data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</h2>
+                    <h2 class="animate-on-load" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</h2>
                     <p class="last-updated" data-de="Stand: 5. Januar 2026" data-en="Last updated: January 5, 2026">Stand: 5. Januar 2026</p>
                 </div>
 
@@ -260,6 +265,7 @@
         </div>
         <div class="footer-gradient"></div>
     </footer>
+    </div>
 
     <script>
         // Three.js 3D Network Background mit Servern
@@ -559,6 +565,20 @@
                     h1.setAttribute('data-text', h1.textContent);
                 }
             });
+        });
+
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loading-screen');
+                
+                document.body.classList.remove('loading');
+                loadingScreen.style.opacity = '0';
+                
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 3000);
         });
     </script>
 </body>
