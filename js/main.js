@@ -38,8 +38,8 @@ async function fetchDiscordStats() {
         const response = await fetch('https://discord.com/api/v10/invites/PbsUptpm7Y?with_counts=true');
         const data = await response.json();
         
-        if (data.approximate_member_count) {
-            const memberCount = data.approximate_member_count.toLocaleString('de-DE');
+        if (data.approximate_presence_count) {
+            const memberCount = data.approximate_presence_count.toLocaleString('de-DE');
             const memberCountEl = document.getElementById('memberCount');
             if (memberCountEl) {
                 memberCountEl.textContent = memberCount;
@@ -49,17 +49,23 @@ async function fetchDiscordStats() {
         console.error('Error fetching Discord stats:', error);
         const memberCountEl = document.getElementById('memberCount');
         if (memberCountEl) {
-            memberCountEl.textContent = '1K+';
+            memberCountEl.textContent = '50+';
         }
     }
 }
 
 // Bot Statistics API Call
 async function fetchBotStats() {
+    const offlineNotice = document.getElementById('statsOfflineNotice');
     try {
         // API URL für Bot-Statistiken
         const response = await fetch('http://192.168.178.25:3000/stats');
         const data = await response.json();
+        
+        // Verstecke Offline-Notice
+        if (offlineNotice) {
+            offlineNotice.style.display = 'none';
+        }
         
         // Animiere die Zahlen
         animateCounter('serverCount', data.servers);
@@ -72,10 +78,16 @@ async function fetchBotStats() {
         }
     } catch (error) {
         console.error('Error fetching bot stats:', error);
+        
+        // Zeige Offline-Notice
+        if (offlineNotice) {
+            offlineNotice.style.display = 'flex';
+        }
+        
         // Fallback Werte bei Fehler
-        document.getElementById('serverCount').textContent = '-';
-        document.getElementById('userCount').textContent = '-';
-        document.getElementById('uptime').textContent = '-';
+        document.getElementById('serverCount').textContent = 'Offline';
+        document.getElementById('userCount').textContent = 'Offline';
+        document.getElementById('uptime').textContent = 'Offline';
     }
 }
 
@@ -293,6 +305,34 @@ document.querySelectorAll('.feature-card, .pricing-card').forEach(card => {
     observer.observe(card);
 });
 
+// Load Discord avatars via backend
+async function loadDiscordAvatars() {
+    const avatarElements = document.querySelectorAll('.discord-avatar');
+    
+    for (const img of avatarElements) {
+        const userId = img.getAttribute('data-discord-id');
+        if (!userId) continue;
+        
+        try {
+            const response = await fetch(`http://192.168.178.25:3000/avatar/${userId}`);
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.avatarUrl) {
+                    img.src = data.avatarUrl;
+                    continue;
+                }
+            }
+        } catch (error) {
+            console.log('Avatar-Abruf fehlgeschlagen:', error);
+        }
+        
+        // Fallback: Default Discord Avatar
+        const defaultAvatarIndex = (parseInt(userId) >> 22) % 6;
+        img.src = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarIndex}.png`;
+    }
+}
+
 // Reduced motion support
 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.body.classList.add('reduced-motion');
@@ -302,5 +342,6 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 document.addEventListener('DOMContentLoaded', () => {
     fetchDiscordStats();
     fetchBotStats(); // Bot Stats abrufen
+    loadDiscordAvatars(); // Discord Avatare laden
     initThreeJS();
 });
