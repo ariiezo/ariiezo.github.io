@@ -314,14 +314,22 @@
 
     <script>
         // Three.js 3D Network Background mit Servern
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const canvas = document.getElementById('bg-canvas');
-        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        let threeJsLoaded = false;
         
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        camera.position.z = 50;
+        // Check if Three.js is available
+        if (typeof THREE !== 'undefined') {
+            threeJsLoaded = true;
+        }
+        
+        if (threeJsLoaded) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const canvas = document.getElementById('bg-canvas');
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            camera.position.z = 50;
 
         // Server-Knoten (größer)
         const servers = [];
@@ -509,14 +517,21 @@
 
             renderer.render(scene, camera);
         }
-        animate();
-
-        // Resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        
+        // Start animation only if Three.js loaded
+        if (threeJsLoaded) {
+            animate();
+        }
+        
+        // Resize - only if Three.js loaded
+        if (threeJsLoaded) {
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        } // End of Three.js block
 
         // Smooth scroll mit Animation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
