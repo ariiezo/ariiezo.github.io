@@ -57,8 +57,8 @@ async function fetchDiscordStats() {
 // Bot Statistics API Call
 async function fetchBotStats() {
     try {
-        // WICHTIG: Ersetze diese URL mit deiner eigenen API URL
-        const response = await fetch('https://api.alphacloud.de/stats');
+        // API URL für Bot-Statistiken
+        const response = await fetch('http://192.168.178.25:3000/stats');
         const data = await response.json();
         
         // Animiere die Zahlen
