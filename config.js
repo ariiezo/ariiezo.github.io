@@ -2,7 +2,7 @@
 const config = {
     // Coming Soon Mode
     comingSoon: {
-        enabled: false, // Set to true to activate Coming Soon page
+        enabled: true, // Set to true to activate Coming Soon page
         launchDate: '2026-01-19T18:00:00', // Launch date in ISO format
         
         // Multilingual Content
@@ -233,5 +233,6 @@ const config = {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = config;
 }
+
 
 
