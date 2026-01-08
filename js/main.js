@@ -59,7 +59,7 @@ async function fetchBotStats() {
     const offlineNotice = document.getElementById('statsOfflineNotice');
     try {
         // API URL für Bot-Statistiken
-        const response = await fetch('http://192.168.178.25:3000/stats');
+        const response = await fetch('https://stats.alphabot.hias.cloud/stats');
         const data = await response.json();
         
         // Verstecke Offline-Notice
@@ -490,3 +490,4 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDiscordAvatars(); // Discord Avatare laden
     initThreeJS();
 });
+
